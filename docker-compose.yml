@@ -1,0 +1,50 @@
+version: "3"
+services:
+  database:
+    restart: always
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=planning-api
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+
+  solace:
+    image: solace/solace-pubsub-standard:latest
+    shm_size: '2gb'
+    environment:
+      - username_admin_globalaccesslevel=admin
+      - username_admin_password=admin
+    ports:
+      - "8081:8080"
+      - "55554:55555"
+      - "8008:8008"
+      - "1883:1883"
+      - "8000:8000"
+      - "5672:5672"
+      - "9000:9000"
+      - "2222:2222"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  configure_solace:
+    image: ubuntu
+    volumes:
+      - ${PWD}/scripts/create_queues.sh:/scripts/create_queues.sh
+    command: ["bash", "/scripts/create_queues.sh"]
+    depends_on:
+      solace:
+        condition: service_healthy
+
+  wiremock:
+    image: wiremock/wiremock:2.35.0
+    ports:
+      - "9999:8080"
+    volumes:
+      - ./src/integrationTest/resources/mappings/:/wiremock/
+    command:
+      --verbose --global-response-templating --root-dir /wiremock
