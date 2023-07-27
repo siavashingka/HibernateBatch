@@ -23,6 +23,10 @@ class Runner(private val service: SampleService) : CommandLineRunner {
         service.batchCreate()
         println("<<<<<<<<<<<<<< TRANSACTIONAL BATCH CREATE >>>>>>>>>>>>>>>>")
         service.transactionalBatchCreate()
+        println("<<<<<<<<<<<<<< CREATE AT ONCE >>>>>>>>>>>>>>>>")
+        service.createAtOnce()
+        println("<<<<<<<<<<<<<< TRANSACTIONAL CREATE AT ONCE >>>>>>>>>>>>>>>>")
+        service.transactionalCreateAtOnce()
     }
 
 }

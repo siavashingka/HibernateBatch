@@ -32,6 +32,23 @@ class SampleService(private val sampleRepository: SampleRepository) {
         sampleRepository.save(SampleEntity(name = "Siavash", family = "Soleymani"))
     }
 
+    fun createAtOnce() {
+        val list = arrayListOf<SampleEntity>()
+        for (i in 1..20) {
+            list.add(SampleEntity(name = "Siavash", family = "Soleymani"))
+        }
+        sampleRepository.saveAll(list)
+    }
+
+    @Transactional
+    fun transactionalCreateAtOnce() {
+        val list = arrayListOf<SampleEntity>()
+        for (i in 1..20) {
+            list.add(SampleEntity(name = "Siavash", family = "Soleymani"))
+        }
+        sampleRepository.saveAll(list)
+    }
+
     fun batchCreate() {
         for (i in 1..20) {
             sampleRepository.save(SampleEntity(name = "Siavash", family = "Soleymani"))
