@@ -1,1 +1,20 @@
-
+spring:
+  datasource:
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 30
+      connection-timeout: 30000
+      max-lifetime: 1800000
+    driverClassName: "org.postgresql.Driver"
+    url: "jdbc:postgresql://127.0.0.1:5432/test?reWriteBatchedInserts=true"
+    username: postgres
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        id.db_structure_naming_strategy: legacy
+        jdbc:
+          batch_size: 5
+        generate_statistics: true
